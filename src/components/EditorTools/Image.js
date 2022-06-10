@@ -6,10 +6,11 @@ import { IconButton } from "components/IconButton"
 import { RemoveElement } from "components/RemoveElement"
 
 export const ImageTool = ({ data, mode, handleRemove }) => {
-  const [imageSrc, setImageSrc] = useState(data.src ?? "https://img.stg.skettt.com/images/watanabe/topics/3/image.png")
+  const [imageSrc, setImageSrc] = useState(data?.src ?? "https://img.stg.skettt.com/images/watanabe/topics/3/image.png")
   const [collapse, setCollapse] = useState(true)
   const [width, setWidth] = useState({ sp: data?.width?.sp, pc: data?.width?.pc })
-  const [align, setAlign] = useState(data?.align)
+  const [align, setAlign] = useState(data?.align || "")
+
 
   return (
     <Box pos="relative">
