@@ -7,7 +7,7 @@ export const ContentImage = ({ data }) => {
       <Box 
         maxW={{base: "89vw", md: "55.15625vw"}}
         maxH={{ base: "60.2564vw", md: "37.0833vw" }}
-        width={(width.sp && width.pc) ? { base: `${width?.sp}%`, md: `${width?.pc}%` } : "auto"}
+        width={(width?.sp && width?.pc) ? { base: `${width?.sp}%`, md: `${width?.pc}%` } : "auto"}
       >
         <Image 
           width="100%"
