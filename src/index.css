@@ -1,0 +1,124 @@
+@font-face {
+  font-family: "DIN2014-Bold";
+  src: url("assets/fonts/DIN2014-Bold.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "DIN2014-Demi";
+  src: url("assets/fonts/DIN2014-Demi.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "DIN2014-Regular";
+  src: url("assets/fonts/test/DIN2014-Regular.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "URWDINCond-Medium";
+  src: url("assets/fonts/URWDINCond-Medium.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "URWDINArabicCond-Black";
+  src: url("assets/fonts/URWDINArabicCond-Black.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "URWDINSemiCond-Regular";
+  src: url("assets/fonts/URWDINSemiCond-Regular.ttf");
+  font-style: normal;
+  font-display: block
+}
+@font-face {
+  font-family: "URWDINArabic-Regular";
+  src: url("assets/fonts/URWDINArabicSemiCondDemi.ttf");
+  font-style: normal;
+  font-display: block
+}
+
+body {
+  margin: 0;
+  font-family: "DIN2014-Regular", "Noto Sans", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+@media only screen and (max-width: 767px) {
+  .pc {
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .sp {
+    display: none !important;
+  }
+}
+
+.remove-content:not(.image-type) {
+  visibility: hidden;
+}
+
+.content-item:hover .remove-content, .content-item:focus-within .remove-content {
+  visibility: visible;
+}
+
+.editable-div:empty::before {
+  content: attr(placeholder);
+  color: lightgray;
+  display: block;
+  position:absolute;    
+  z-index: 0;
+}
+
+.editable-div:focus {
+  outline: none;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+
+.content-row {
+  counter-increment: line-number;
+}
+.content-row:before {
+  position: absolute;
+  left: -2.2vw;
+  top: 0;
+  content: counter(line-number);
+  text-align: right;
+  font-size: 12px;
+}
+
+.animatedBorder {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(259deg, rgba(255,255,255,1) 50%, rgba(51,203,111,1) 100%);
+  border-radius: 50%;
+  animation-name: Rotate;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes Rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
