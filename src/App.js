@@ -42,7 +42,15 @@ function App() {
       } else if(elementType === "image") {
         let find = el.getElementsByClassName(item.tool_id)[0]
         let src = find?.src 
-        arr.push({ ...item, data: src })
+        let data = {
+          align: find.dataset['align'],
+          width: {
+            sp: find.dataset['width_sp'],
+            pc: find.dataset['width_pc']
+          },
+          src
+        }
+        arr.push({ ...item, data: data })
       } else if(elementType === "button") {
         let findButton = el.getElementsByClassName(item.tool_id)[0]
         let data = {
