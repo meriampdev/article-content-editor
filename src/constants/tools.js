@@ -1,14 +1,14 @@
 import {
   ButtonTool,
-  ContentBody,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
   HTMLEditor,
   ImageTool
 } from "components/EditorTools"
 import { LineBreak } from "components/ElementTemplate/LineBreak"
+import { Heading1 } from "components/ElementTemplate/H1"
+import { Heading2 } from "components/ElementTemplate/H2"
+import { Heading3 } from "components/ElementTemplate/H3"
+import { Heading4 } from "components/ElementTemplate/H4"
+import { ContentBody } from "components/ElementTemplate/ContentBody"
 import { RenderContent } from "components/RenderContent"
 
 export const TOOLIDS = [

@@ -161,7 +161,7 @@ function App() {
         <Button 
           onClick={handleLoadData}
         >Load Data</Button>
-        <Input placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
+        <Input maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
       </HStack>
       <Box py={5} pl={10}>
         <Box 

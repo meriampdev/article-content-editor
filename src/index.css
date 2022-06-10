@@ -92,7 +92,7 @@ code {
 }
 .content-row:before {
   position: absolute;
-  left: -2.2vw;
+  left: -1.5vw;
   top: 0;
   content: counter(line-number);
   text-align: right;

@@ -1,6 +1,6 @@
 import { Box, Grid } from "@chakra-ui/react"
 
-export const Heading4 = ({ data, editable }) => {
+export const Heading4 = ({ data, mode }) => {
   return (
     <Box
       key="heading2"
@@ -18,7 +18,7 @@ export const Heading4 = ({ data, editable }) => {
         />
         <Box 
           fontSize={{base: "4.1025vw", md: "1.25vw"}}
-          contentEditable={ editable }
+          contentEditable={ mode === "edit" }
           className="editable-div h4"
           lineHeight="normal"
           dangerouslySetInnerHTML={{ __html: data ?? "H4" }}

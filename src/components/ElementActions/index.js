@@ -22,9 +22,11 @@ export const ElementActions = ({ index, contents, setContent }) => {
       borderRight="1px solid #1CBF73"
       className="remove-btn"
     >
-      <ReorderElement currIndex={index} contents={contents} setContent={setContent} />
-      <Box cursor="pointer" color="#1CBF73" _hover={{ color: "red" }} ml={1} mr={5}>
+      <Box cursor="pointer" color="red" _hover={{ color: "red" }}>
         <i onClick={handleRemove} className="fa-solid fa-circle-minus"></i>
+      </Box>
+      <Box ml={3} mr={5}>
+        <ReorderElement currIndex={index} contents={contents} setContent={setContent} />
       </Box>
     </Box>
   )

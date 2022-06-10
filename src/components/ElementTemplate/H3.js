@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react"
 
-export const Heading3 = ({ data, editable }) => {
+export const Heading3 = ({ data, mode }) => {
   return (
     <Box
       key="heading3"
@@ -10,8 +10,8 @@ export const Heading3 = ({ data, editable }) => {
       display="flex"
       alignItems="center"
       justifyContent="flex-start"
-      px={editable ? 5 : 3}
-      contentEditable={ editable }
+      px={(mode === "edit") ? 5 : 3}
+      contentEditable={ mode === "edit" }
       fontSize={{base: "4.6153vw", md: "1.2vw", "2xl": "1.4583vw"}}
       className="editable-div h3"
       lineHeight="normal"
