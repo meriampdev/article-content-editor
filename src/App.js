@@ -52,7 +52,8 @@ function App() {
         let data = {
           link: findButton.dataset['url'],
           align: findButton.dataset['align'],
-          text: findButton.dataset['text']
+          text: findButton.dataset['text'],
+          target: findButton.dataset['target'],
         }
         arr.push({ ...item, data: data })
       } else {
