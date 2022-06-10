@@ -3,19 +3,20 @@ import {
   Flex,
   Input,
   Box,
-  Collapse
+  Collapse,
+  Select
 } from "@chakra-ui/react"
 import { Rnd } from "react-rnd";
 import { IconButton } from "components/IconButton"
 import { ButtonLink } from "components/ElementTemplate/ButtonLink"
-import { RemoveElement } from "components/RemoveElement"
 
-export const ButtonTool = ({ data, mode, handleRemove }) => {
+export const ButtonTool = ({ data, mode }) => {
   const [collapse, setCollapse] = useState(true && mode === "edit" && !data)
   const [buttonLink, setButtonLink] = useState( data ?? { 
     text: "Button Link", 
     link: "https://example.com/", 
-    align: 'flex-start' 
+    align: 'flex-start',
+    target: "_blank"
   })
 
   return (
@@ -24,7 +25,6 @@ export const ButtonTool = ({ data, mode, handleRemove }) => {
       background={(collapse) ? "yellow" : "unset"}
     >
       <ButtonLink data={buttonLink} />
-      <RemoveElement mode={mode} handleRemove={handleRemove} />
       {mode === "edit" && 
         <Box 
           pos="absolute"
@@ -63,6 +63,16 @@ export const ButtonTool = ({ data, mode, handleRemove }) => {
                     value={buttonLink?.link}
                     onChange={(e) => setButtonLink(prev => ({ ...prev, link: e?.target?.value }))}
                   />
+                  <Select 
+                    placeholder='Select target'
+                    value={buttonLink?.target}
+                    onChange={(e) => setButtonLink(prev => ({ ...prev, target: e?.target?.value }))}
+                  >
+                    <option value='_blank'>_blank</option>
+                    <option value='_parent'>_parent</option>
+                    <option value='_self'>_self</option>
+                    <option value='_top'>_top</option>
+                  </Select>
                   <Flex flex="5%" justifyContent="space-evenly">
                     <IconButton 
                       active={buttonLink.align === "flex-start"}

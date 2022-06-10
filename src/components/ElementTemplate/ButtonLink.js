@@ -9,7 +9,7 @@ export const ButtonLink = ({ data }) => {
     <Flex w="100%" justifyContent={align}>
       <Button
         className="button-link"
-        onClick={() => window.open(link, '_blank')}
+        onClick={() => window.open(link, data?.target)}
         color="#FFF"
         bg="#1CBF73"
         data-url={link}

@@ -3,9 +3,8 @@ import { Box, Flex, Input, Collapse } from "@chakra-ui/react"
 import { ContentImage } from "components/ElementTemplate/Image"
 import { Rnd } from "react-rnd";
 import { IconButton } from "components/IconButton"
-import { RemoveElement } from "components/RemoveElement"
 
-export const ImageTool = ({ data, mode, handleRemove }) => {
+export const ImageTool = ({ data, mode }) => {
   const [imageSrc, setImageSrc] = useState(data?.src ?? "https://img.stg.skettt.com/images/watanabe/topics/3/image.png")
   const [collapse, setCollapse] = useState(true)
   const [width, setWidth] = useState({ sp: data?.width?.sp, pc: data?.width?.pc })
@@ -15,7 +14,6 @@ export const ImageTool = ({ data, mode, handleRemove }) => {
   return (
     <Box pos="relative">
       <ContentImage data={{ align, width, src: imageSrc }} />
-      <RemoveElement mode={mode} handleRemove={handleRemove} />
       {mode === "edit" && 
         <Box 
           pos="absolute" 

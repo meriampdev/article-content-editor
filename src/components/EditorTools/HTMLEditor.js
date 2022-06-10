@@ -8,9 +8,8 @@ import "ace-builds/src-noconflict/ext-language_tools"
 import { Rnd } from "react-rnd";
 import { IconButton } from "components/IconButton"
 import { ContentBody } from "components/ElementTemplate/ContentBody"
-import { RemoveElement } from "components/RemoveElement"
 
-export const HTMLEditor = ({ data, mode, handleRemove }) => {
+export const HTMLEditor = ({ data, mode }) => {
   const [value, setValue] = useState(data ?? "Edit This")
   const [collapse, setCollapse] = useState(true && !data)
 
@@ -21,7 +20,6 @@ export const HTMLEditor = ({ data, mode, handleRemove }) => {
         mode={mode}
         className="section"
       />
-      <RemoveElement mode={mode} handleRemove={handleRemove} />
       <Box 
         pos="absolute"
         top="0"

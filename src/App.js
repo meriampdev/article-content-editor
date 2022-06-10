@@ -9,6 +9,7 @@ import { Rnd } from "react-rnd";
 import { Editor } from "components/Editor"
 import { ELEMENT_TYPE } from "constants/tools"
 import { RenderContent } from "components/RenderContent"
+import { ElementActions } from "components/ElementActions"
 
 function App() {
   const [content, setContent] = useState([])
@@ -18,18 +19,13 @@ function App() {
   const [saved, setSaved] = useState(false)
   const [cleared, setCleared] = useState(false)
   const [loadingPreview, setLoadingPreview] = useState(false)
+  const [dataInput, setDataInput] = useState("")
 
   useEffect(() => {
     let stored = localStorage.getItem("topic-content")
     let saved = !!stored ? JSON.parse(stored) : []
     setContent(saved)
   }, [])
-
-  const handleRemove = (index) => {
-    let arr = [...content]
-    let newarr = arr.filter((f, i) => i !== index)
-    setContent(newarr)
-  }
 
   const getArray = () => {
     let arr = []
@@ -109,7 +105,12 @@ function App() {
     }, 1000)
   }
 
-  console.log('content', content)
+  const handleLoadData = () => {
+    let data = !!dataInput ? JSON.parse(dataInput) : []
+    setContent(data)
+    setDataInput("")
+  }
+
   return (
     <Box minH="100vh" p="1vw 3vw">
       <HStack spacing={3}>
@@ -157,8 +158,12 @@ function App() {
             >Go</Button>
           </>
         }
+        <Button 
+          onClick={handleLoadData}
+        >Load Data</Button>
+        <Input placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
       </HStack>
-      <Box p={5}>
+      <Box py={5} pl={10}>
         <Box 
           id="content-display" 
           bg="#FFF" 
@@ -177,7 +182,10 @@ function App() {
                   data={item?.data}
                   tool_id={item?.tool_id} 
                   mode="edit" 
-                  handleRemove={() => handleRemove(index)}
+                />
+                <ElementActions 
+                  contents={content}
+                  setContent={setContent}
                   index={index}
                 />
               </Box>
