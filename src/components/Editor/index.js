@@ -9,7 +9,7 @@ import {
 import { IconButton } from "components/IconButton"
 import { TOOLIDS, TOOL_ICONS } from "constants/tools"
 
-export const Editor = ({ count, setContent }) => {
+export const Editor = ({ count, setContent, dragHandleClass, fontSize, boxSize }) => {
   const [collapse, setCollapse] = useState(false)
   const [atIndex, setAtIndex] = useState("")
 
@@ -44,16 +44,16 @@ export const Editor = ({ count, setContent }) => {
   return (
     <Box bg={collapse ? "#FFF" : ""} boxShadow={collapse ? "rgba(0, 0, 0, 0.35) 0px 5px 15px" : ''}>
       <Box
-        className="drag-handle"
+        className={ dragHandleClass ?? "drag-handle"}
         bg="#FFF"
         boxShadow={!collapse ? "rgba(0, 0, 0, 0.35) 0px 5px 15px" : ""}
         cursor="pointer"
         borderRadius="100%"
-        boxSize="5vw"
+        boxSize={boxSize ?? "5vw"}
         display="flex"
         alignItems="center"
         justifyContent="center"
-        fontSize={50}
+        fontSize={fontSize ?? 50}
         onClick={(e) => {
           e?.stopPropagation()
           setCollapse(!collapse)

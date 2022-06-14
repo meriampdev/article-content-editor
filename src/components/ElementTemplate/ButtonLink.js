@@ -19,8 +19,10 @@ export const ButtonLink = ({ data }) => {
         _hover={{ opacity: "0.8" }}
         w={{ base: "100%", md: "19.32vw"}}
         borderRadius="none"
-        fontSize={{ base: "3.07vw", md: "1.5vw", xl: "0.83vw"}}
-        h={{ base: "54px", md: "5vw", xl: "3.33vw" }}
+        fontSize={{ base: "3.07vw", md: "0.83vw"}}
+        h={{ base: "54px", md: "3.33vw" }}
+        data-styles={!!data?.styles ? JSON.stringify(data?.styles) : "{}"}
+        {...data?.styles}
       >{text}</Button>
     </Flex>
   )

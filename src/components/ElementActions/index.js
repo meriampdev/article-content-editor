@@ -20,7 +20,7 @@ export const ElementActions = ({ index, contents, setContent }) => {
       justifyContent="center"
       pr={1}
       borderRight="1px solid #1CBF73"
-      className="remove-btn"
+      className="element-actions"
     >
       <Box cursor="pointer" color="red" _hover={{ color: "red" }}>
         <i onClick={handleRemove} className="fa-solid fa-circle-minus"></i>

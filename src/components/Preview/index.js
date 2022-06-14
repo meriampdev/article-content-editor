@@ -12,8 +12,7 @@ import { useParams } from "react-router-dom";
 import { GET_TOPIC_DETAIL } from "graphql/topics"
 import { useQuery } from "@apollo/client"
 import { FullPageCoveredLoader } from "components/PageLoader"
-import { ContentBody } from "components/ElementTemplate/ContentBody"
-import { RenderContent } from "components/RenderContent"
+import { ELEMENT_TEMPLATE } from "constants/tools"
 
 const Dash = ({ ...rest }) => (
   <>
@@ -130,18 +129,13 @@ export const Preview = (props) => {
                   mt={{base: '5vw', md: '3.17vw'}}
                 >
                   {contentArray.map((item) => {
-                    if(["section", "content-text"].includes(item.tool_id)) {
-                      return <ContentBody key={item.item_id} data={item?.data} />
-                    } else {
-                      return (
-                        <RenderContent 
-                          key={item.item_id}
-                          tool_id={item?.tool_id} 
-                          mode="display" 
-                          data={item?.data}
-                        />
-                      )
-                    }
+                    const Component = ELEMENT_TEMPLATE[item?.tool_id]
+                    let styles = item?.data?.styles ? JSON.parse(item?.data?.styles) : {}
+                    return (
+                      <Box my={2}>
+                        <Component mode="display" data={{ ...item?.data, styles }} />
+                      </Box>
+                    )
                   })}
                 </Box>
               </Box>

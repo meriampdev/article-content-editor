@@ -66,6 +66,10 @@ code {
   }
 }
 
+.react-draggable {
+  z-index: 10000;
+}
+
 .remove-content:not(.image-type) {
   visibility: hidden;
 }

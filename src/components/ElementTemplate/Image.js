@@ -7,7 +7,7 @@ export const ContentImage = ({ data }) => {
       <Box 
         maxW={{base: "89vw", md: "55.15625vw"}}
         maxH={{ base: "60.2564vw", md: "37.0833vw" }}
-        width={(width?.sp && width?.pc) ? { base: `${width?.sp}%`, md: `${width?.pc}%` } : "auto"}
+        width={(width?.base && width?.md) ? { base: `${width?.base}`, md: `${width?.md}` } : "auto"}
       >
         <Image 
           width="100%"
@@ -17,8 +17,8 @@ export const ContentImage = ({ data }) => {
           className="image"
           src={src} 
           data-align={align}
-          data-width_sp={width?.sp}
-          data-width_pc={width?.pc}
+          data-width_sp={width?.base}
+          data-width_pc={width?.md}
         />
       </Box>
     </Flex>

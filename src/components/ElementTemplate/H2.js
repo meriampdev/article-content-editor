@@ -8,7 +8,9 @@ export const Heading2 = ({ data, mode }) => {
         contentEditable={ mode === "edit" }
         className="editable-div h2"
         lineHeight="normal"
-        dangerouslySetInnerHTML={{ __html: data ?? "H2" }}
+        dangerouslySetInnerHTML={{ __html: data?.text ?? "H2" }}
+        data-styles={!!data?.styles ? JSON.stringify(data?.styles) : "{}"}
+        {...data?.styles}
       />
       <Box 
         bg="#000"

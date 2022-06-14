@@ -7,9 +7,8 @@ import {
 } from "@chakra-ui/react"
 import { Rnd } from "react-rnd";
 import { Editor } from "components/Editor"
+import { ContentEdit } from "components/Editor/ContentEdit"
 import { ELEMENT_TYPE } from "constants/tools"
-import { RenderContent } from "components/RenderContent"
-import { ElementActions } from "components/ElementActions"
 
 function App() {
   const [content, setContent] = useState([])
@@ -34,26 +33,29 @@ function App() {
       let elementType = ELEMENT_TYPE[item?.tool_id]
       if(elementType === "text") {
         let find = el.getElementsByClassName(item.tool_id)[0]
-        arr.push({ ...item, data: find.innerHTML })
+        let styles = find.dataset['styles']
+        arr.push({ ...item, data: { text: find.innerHTML, styles } })
       } else if(elementType === "image") {
         let find = el.getElementsByClassName(item.tool_id)[0]
         let src = find?.src 
         let data = {
           align: find.dataset['align'],
           width: {
-            sp: find.dataset['width_sp'],
-            pc: find.dataset['width_pc']
+            base: find.dataset['width_sp'],
+            md: find.dataset['width_pc']
           },
           src
         }
         arr.push({ ...item, data: data })
       } else if(elementType === "button") {
         let findButton = el.getElementsByClassName(item.tool_id)[0]
+        let styles = findButton.dataset['styles']
         let data = {
           link: findButton.dataset['url'],
           align: findButton.dataset['align'],
           text: findButton.dataset['text'],
           target: findButton.dataset['target'],
+          styles
         }
         arr.push({ ...item, data: data })
       } else {
@@ -153,6 +155,7 @@ function App() {
           <>
             <Input maxW="10vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
             <Button 
+              disabled={!topicId}
               onClick={handlePreview}
               isLoading={loadingPreview}
               loadingText="Go"
@@ -164,36 +167,7 @@ function App() {
         >Load Data</Button>
         <Input maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
       </HStack>
-      <Box py={5} pl={10}>
-        <Box 
-          id="content-display" 
-          bg="#FFF" 
-          maxW={{base: "90vw", md: "55.15625vw"}} 
-          fontFamily="DIN2014-Regular" 
-        >
-          {content.map((item, index) => {
-            return (
-              <Box 
-                key={item.item_id}
-                pos="relative" 
-                id={item.item_id}
-                className="content-row"
-              >
-                <RenderContent 
-                  data={item?.data}
-                  tool_id={item?.tool_id} 
-                  mode="edit" 
-                />
-                <ElementActions 
-                  contents={content}
-                  setContent={setContent}
-                  index={index}
-                />
-              </Box>
-            )
-          })}
-        </Box>
-      </Box>
+      <ContentEdit contents={content} setContent={setContent} />
       <Box my={10}>
         <Rnd 
           dragHandleClassName="drag-handle"
