@@ -3,9 +3,11 @@ import {
   HTMLEditor,
   ImageTool,
   FlexboxTool,
-  TextStyles
+  TextStyles,
+  TextLinkTool
 } from "components/EditorTools"
 import { ButtonLink } from "components/ElementTemplate/ButtonLink"
+import { TextLink } from "components/ElementTemplate/TextLink"
 import { ContentBody } from "components/ElementTemplate/ContentBody"
 import { Heading1 } from "components/ElementTemplate/H1"
 import { Heading2 } from "components/ElementTemplate/H2"
@@ -22,6 +24,7 @@ export const TOOLIDS = [
   "content-text",
   "image", 
   "section",
+  "text-link",
   "button-link",
   "line-break",
   // "flex-box"
@@ -35,23 +38,11 @@ export const TOOL_ICONS = {
   "content-text": <ContentBody />,
   "image": <i className="fa-solid fa-image"></i>,
   "section": <i className="fa-solid fa-code"></i>,
-  "button-link": <i className="fa-solid fa-link"></i>,
+  "text-link": <i className="fa-solid fa-link"></i>,
+  "button-link": <ion-icon name="link-outline"></ion-icon>,
   "line-break": <span>br</span>,
   "flex-box": <i className="fa-solid fa-grip"></i>
 }
-
-export const TOOLS = [
-  { id: "h1", Component: Heading1 },
-  { id: "h2", Component: Heading2 },
-  { id: "h3", Component: Heading3 },
-  { id: "h4", Component: Heading4 },
-  { id: "content-text", Component: ContentBody },
-  { id: "image", Component: ImageTool },
-  { id: "section", Component: HTMLEditor },
-  { id: "button-link", Component: ButtonTool },
-  { id: "line-break", Component: LineBreak },
-  { id: "flex-box", Component: FlexboxTool }
-]
 
 export const ELEMENT_TEMPLATE = {
   "h1": Heading1,
@@ -61,6 +52,7 @@ export const ELEMENT_TEMPLATE = {
   "content-text": ContentBody,
   "image": ContentImage,
   "section": ContentBody,
+  "text-link": TextLink,
   "button-link": ButtonLink,
   "line-break": LineBreak,
   "flex-box": FlexboxTool
@@ -74,29 +66,9 @@ export const ELEMENT_TOOL = {
   "content-text": TextStyles,
   "image": ImageTool,
   "section": HTMLEditor,
+  "text-link": TextLinkTool,
   "button-link": ButtonTool,
   "line-break": LineBreak,
-  "flex-box": FlexboxTool
-}
-
-export const TOOLCOMPONENT = {
-  "h1": Heading1,
-  "h2": Heading2,
-  "h3": Heading3,
-  "h4": Heading4,
-  "content-text": ContentBody,
-  "image": ImageTool,
-  "section": HTMLEditor,
-  "button-link": ButtonTool,
-  "line-break": LineBreak,
-  "flex-box": FlexboxTool
-}
-
-export const EDITING_TOOL = {
-  "text": Heading1,
-  "image": ImageTool,
-  "html": HTMLEditor,
-  "button-link": ButtonTool,
   "flex-box": FlexboxTool
 }
 
@@ -144,7 +116,11 @@ export const ELEMENT_DEFAULT_DATA = {
   "image": {
     align: "flex-start",
     width: { base: "100%", md: "100%" },
-    src: "https://img.stg.skettt.com/images/watanabe/topics/3/image.png"
+    src: "https://img.stg.skettt.com/images/watanabe/topics/3/image.png",
+    styles: {
+      marginTop: { base: "1vw", md: "1vw" },
+      marginBottom: { base: "1vw", md: "1vw" }
+    }
   },
   "section": {
     content: "text",
@@ -152,6 +128,15 @@ export const ELEMENT_DEFAULT_DATA = {
       fontSize: {base: "4.1025vw", md: "1.25vw"},
       lineHeight: {base: "11.5vw", md: "1.875vw"},
       color: "#151515"
+    }
+  },
+  "text-link": { 
+    text: "Text Link", 
+    link: "https://example.com/", 
+    align: 'flex-start',
+    target: "_blank",
+    styles: {
+      fontSize: {base: "3.5897vw", md: "0.9375vw"},
     }
   },
   "button-link": { 
@@ -180,6 +165,7 @@ export const ELEMENT_TYPE = {
   "content-text": "text",
   "image": "image",
   "section": "text",
+  "text-link": "button",
   "button-link": "button",
   "line-break": "line-break",
   "flex-box": "flex-box"

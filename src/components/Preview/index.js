@@ -56,6 +56,7 @@ export const Preview = (props) => {
   const stored = localStorage.getItem(`preview-content-${id}`)
   const contentArray = !!stored ? JSON.parse(stored) : []
 
+  console.log('contentArray', contentArray)
   return (
     <Box padding={{ base: "5.12vw", md: "5vw", xl: "7.8vw"}}>
       {loading && <FullPageCoveredLoader />}

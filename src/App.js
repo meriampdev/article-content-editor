@@ -38,13 +38,15 @@ function App() {
       } else if(elementType === "image") {
         let find = el.getElementsByClassName(item.tool_id)[0]
         let src = find?.src 
+        let styles = find.dataset['styles']
         let data = {
           align: find.dataset['align'],
           width: {
             base: find.dataset['width_sp'],
             md: find.dataset['width_pc']
           },
-          src
+          src,
+          styles
         }
         arr.push({ ...item, data: data })
       } else if(elementType === "button") {

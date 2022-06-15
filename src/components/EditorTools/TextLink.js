@@ -20,15 +20,16 @@ import { SketchPicker } from 'react-color';
 import { IconButton } from "components/IconButton"
 import { ELEMENT_DEFAULT_DATA } from "constants/tools"
 
-export const ButtonTool = ({ tool_id, collapse, data, setData }) => {
+export const TextLinkTool = ({ tool_id, collapse, data, setData }) => {
   const [colorPicker, setColorPicker] = useState({
     display: false,
-    color: data?.styles?.color ?? "#FFF"
+    color: data?.styles?.color ?? "#151515"
   })
-  const [bgColorPicker, setBGColorPicker] = useState({
-    display: false,
-    color: data?.styles?.bg ?? "#1CBF73"
-  })
+
+  const handleSetStyle = (styleKey, styleValue) => {
+    let value = data?.styles ? data?.styles[styleKey] !== styleValue ? styleValue : '' : styleValue
+    setData(prev => ({ ...prev, styles: { ...prev?.styles, [styleKey]: value } }))
+  }
 
   const handleResponsiveStyle = (styleKey, breakpoint, value) => {
     setData(prev => {
@@ -74,44 +75,20 @@ export const ButtonTool = ({ tool_id, collapse, data, setData }) => {
           <Flex>
             <HStack>
               <VStack alignItems="flex-start">
-                <Text fontSize="xs">Width SP</Text>
+                <Text fontSize="xs">Line Height SP</Text>
                 <Input 
-                  value={data?.styles?.width?.base} 
-                  onChange={(e) => handleResponsiveStyle('width', 'base', e?.target?.value)}
+                  value={data?.styles?.lineHeight?.base} 
+                  onChange={(e) => handleResponsiveStyle('lineHeight', 'base', e?.target?.value)}
                   placeholder="sp" 
                   size="xs" 
                   mt="0.2rem !important" 
                 />
               </VStack>
               <VStack alignItems="flex-start">
-                <Text fontSize="xs">Width PC</Text>
+                <Text fontSize="xs">Line Height PC</Text>
                 <Input 
-                  value={data?.styles?.width?.md} 
-                  onChange={(e) => handleResponsiveStyle('width', 'md', e?.target?.value)}
-                  placeholder="pc" 
-                  size="xs" 
-                  mt="0.2rem !important" 
-                />
-              </VStack>
-            </HStack>
-          </Flex>
-          <Flex>
-            <HStack>
-              <VStack alignItems="flex-start">
-                <Text fontSize="xs">Height SP</Text>
-                <Input 
-                  value={data?.styles?.height?.base} 
-                  onChange={(e) => handleResponsiveStyle('height', 'base', e?.target?.value)}
-                  placeholder="sp" 
-                  size="xs" 
-                  mt="0.2rem !important" 
-                />
-              </VStack>
-              <VStack alignItems="flex-start">
-                <Text fontSize="xs">Height PC</Text>
-                <Input 
-                  value={data?.styles?.height?.md} 
-                  onChange={(e) => handleResponsiveStyle('height', 'md', e?.target?.value)}
+                  value={data?.styles?.lineHeight?.md} 
+                  onChange={(e) => handleResponsiveStyle('lineHeight', 'md', e?.target?.value)}
                   placeholder="pc" 
                   size="xs" 
                   mt="0.2rem !important" 
@@ -195,28 +172,7 @@ export const ButtonTool = ({ tool_id, collapse, data, setData }) => {
             <Popover>
               <PopoverTrigger>
                 <HStack align="center" spacing={2} >
-                  <Text>Background: </Text>
-                  <Box border="1px solid" cursor="pointer" boxSize={3} bg={bgColorPicker?.color}  />
-                </HStack>
-              </PopoverTrigger>
-              <PopoverContent>
-                <PopoverArrow />
-                <PopoverCloseButton />
-                <PopoverBody>
-                  <SketchPicker 
-                    color={bgColorPicker?.color}  
-                    onChange={(color) => {
-                      setData(prev => ({ ...prev, styles: { ...prev?.styles, bg: color.hex } }))
-                      setBGColorPicker(prev => ({ ...prev, color: color.hex }))
-                    }}
-                  />
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger>
-                <HStack align="center" spacing={2} >
-                  <Text>Text Color: </Text>
+                  <Text>Color: </Text>
                   <Box border="1px solid" cursor="pointer" boxSize={3} bg={colorPicker?.color}  />
                 </HStack>
               </PopoverTrigger>
@@ -234,6 +190,18 @@ export const ButtonTool = ({ tool_id, collapse, data, setData }) => {
                 </PopoverBody>
               </PopoverContent>
             </Popover>
+            <IconButton
+              active={data?.styles?.fontStyle === "italic"}
+              onClick={() => handleSetStyle('fontStyle', 'italic')}
+            ><i className="fa-solid fa-italic"></i></IconButton>
+            <IconButton
+              active={data?.styles?.fontWeight === "bold"}
+              onClick={() => handleSetStyle('fontWeight', 'bold')}
+            ><i className="fa-solid fa-bold"></i></IconButton>
+            <IconButton
+              active={data?.styles?.textDecoration === "underline"}
+              onClick={() => handleSetStyle('textDecoration', 'underline')}
+            ><i className="fa-solid fa-underline"></i></IconButton>
             <IconButton 
               active={data?.align === "flex-start"}
               onClick={() => setData(prev => ({ ...prev, align: 'flex-start' }))}

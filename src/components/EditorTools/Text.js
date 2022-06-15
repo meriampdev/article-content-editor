@@ -147,6 +147,54 @@ export const TextStyles = ({ tool_id, collapse, data, setData }) => {
               </VStack>
             </HStack>
           </Flex>
+          <Flex>
+            <HStack>
+              <VStack alignItems="flex-start">
+                <Text fontSize="xs">pt SP</Text>
+                <Input 
+                  value={data?.styles?.paddingTop?.base} 
+                  onChange={(e) => handleResponsiveStyle('paddingTop', 'base', e?.target?.value)}
+                  placeholder="sp" 
+                  size="xs" 
+                  mt="0.2rem !important" 
+                />
+              </VStack>
+              <VStack alignItems="flex-start">
+                <Text fontSize="xs">pt PC</Text>
+                <Input 
+                  value={data?.styles?.paddingTop?.md} 
+                  onChange={(e) => handleResponsiveStyle('paddingTop', 'md', e?.target?.value)}
+                  placeholder="pc" 
+                  size="xs" 
+                  mt="0.2rem !important" 
+                />
+              </VStack>
+            </HStack>
+          </Flex>
+          <Flex>
+            <HStack>
+              <VStack alignItems="flex-start">
+                <Text fontSize="xs">pb SP</Text>
+                <Input 
+                  value={data?.styles?.paddingBottom?.base} 
+                  onChange={(e) => handleResponsiveStyle('paddingBottom', 'base', e?.target?.value)}
+                  placeholder="sp" 
+                  size="xs" 
+                  mt="0.2rem !important" 
+                />
+              </VStack>
+              <VStack alignItems="flex-start">
+                <Text fontSize="xs">pb PC</Text>
+                <Input 
+                  value={data?.styles?.paddingBottom?.md} 
+                  onChange={(e) => handleResponsiveStyle('paddingBottom', 'md', e?.target?.value)}
+                  placeholder="pc" 
+                  size="xs" 
+                  mt="0.2rem !important" 
+                />
+              </VStack>
+            </HStack>
+          </Flex>
         </Box>
       </Collapse>
     </Box>

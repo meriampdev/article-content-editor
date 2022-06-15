@@ -6,7 +6,7 @@ import { IconButton } from "components/IconButton"
 
 export const RenderContent = ({ contentData, tool_id, mode}) => {
   let styles = (contentData && !!contentData?.styles) ? JSON.parse(contentData?.styles) : null
-  const [data, setData] = useState( (styles || tool_id === "image") ? { ...contentData, styles } : ELEMENT_DEFAULT_DATA[tool_id])
+  const [data, setData] = useState( (styles) ? { ...contentData, styles } : ELEMENT_DEFAULT_DATA[tool_id])
   const [collapse, setCollapse] = useState(false)
   const Component = ELEMENT_TEMPLATE[tool_id]
   const ElementTool = ELEMENT_TOOL[tool_id]
@@ -34,7 +34,6 @@ export const RenderContent = ({ contentData, tool_id, mode}) => {
               <HStack 
                 alignItems="flex-start"
                 bg={collapse ? "#FFF" : ""}
-                alignItems="flex-start" 
               >
                 <IconButton 
                   onClick={() => setCollapse(!collapse)} 
