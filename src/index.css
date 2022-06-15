@@ -67,7 +67,7 @@ code {
 }
 
 .react-draggable {
-  z-index: 10000;
+  z-index: 100;
 }
 
 .remove-content:not(.image-type) {

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   Collapse,
   Button,
@@ -13,21 +13,157 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
-  Text
+  Text,
+  useDisclosure
 } from "@chakra-ui/react"
 import { SketchPicker } from 'react-color';
+import { AddLinkModal } from "components/AddLinkModal"
 import { IconButton } from "components/IconButton"
 import { ELEMENT_DEFAULT_DATA } from "constants/tools"
 
-export const TextStyles = ({ tool_id, collapse, data, setData }) => {
+export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
+  const elementID = `section-${item_id}`
+  const { isOpen, onToggle, onClose } = useDisclosure()
   const [colorPicker, setColorPicker] = useState({
     display: false,
     color: data?.styles?.color ?? "#151515"
   })
+  const [selection, setSelection] = useState(null)
+  const [appendTarget, setAppendTarget] = useState(null)
+
+  useEffect(() => {
+    const divArea = document.getElementById(elementID)
+    divArea.addEventListener('input', (e) => {
+      let childNodes = e?.target?.childNodes
+      childNodes.forEach((node, i) => {
+        node.addEventListener('mousedown', function(event) {
+          // This will only run the event once and then remove itself
+          addSelfDestructiveEventListener(document, 'mouseup', function() {
+            mySelection(i, event)
+          })
+        });
+      })
+    })
+  }, [])
+
+  const addSelfDestructiveEventListener = (element, eventType, callback) => {
+    let handler = () => {
+        callback();
+        element.removeEventListener(eventType, handler);
+    };
+    element.addEventListener(eventType, handler);
+  };
+
+  const mySelection = (nodeIndex, event) => {
+    var sel = document.getSelection();
+    let startPos = sel?.anchorOffset;
+    let endPos = sel?.extentOffset;
+    let wholeString = sel?.focusNode?.wholeText
+    let selectedText = sel?.focusNode?.wholeText?.substring(startPos, endPos);
+  
+    // if highlighted backwards
+    if(startPos > endPos) {
+      startPos = sel?.extentOffset 
+      endPos = sel?.anchorOffset
+    }
+
+    if(sel?.type === "Caret") {
+      setAppendTarget(event?.target)
+    }
+
+    if(selectedText?.length <= 0) {
+      setSelection(null)
+      return; // stop here if selection length is <= 0
+    }
+
+    const parentNodeName = sel?.focusNode?.parentNode?.localName
+    const selData = { 
+      startPos, 
+      endPos, 
+      selectedText, 
+      wholeString, 
+      nodeIndex, 
+      parentNodeName,
+      focusNode: sel?.focusNode,
+      target: event?.target
+    }
+    
+    if(selectedText) {
+      setSelection(selData)
+    } 
+  };
 
   const handleSetStyle = (styleKey, styleValue) => {
-    let value = data?.styles ? data?.styles[styleKey] !== styleValue ? styleValue : '' : styleValue
-    setData(prev => ({ ...prev, styles: { ...prev?.styles, [styleKey]: value } }))
+    if(selection) {
+      let s1 = selection?.wholeString?.substring(0, selection?.startPos)
+      let s2 = selection?.wholeString?.substring(selection?.endPos, selection?.wholeString?.length)
+      const divArea = document.getElementById(elementID)
+      if(divArea?.childNodes) {
+        let insert = ''
+        let fontweight = selection?.target?.parentNode?.dataset?.fontweight
+        let fontstyle = selection?.target?.parentNode?.dataset?.fontstyle
+        let decoration = selection?.target?.parentNode?.dataset?.decoration
+        let color = styleValue
+        let customized = selection?.target?.parentNode?.dataset?.customized
+        if(styleKey !== "color") {
+          if(styleValue === "bold") {
+            if(fontweight === "bold") {
+              fontweight = "normal"
+            } else {
+              fontweight = "bold"
+            }
+          } else if(styleValue === "italic") {
+            if(fontstyle === "italic") {
+              fontstyle = "normal"
+            } else {
+              fontstyle = "italic"
+            }
+          } else if(styleValue === "underline") {
+            if(decoration === "underline") {
+              decoration = "none"
+            } else {
+              decoration = "underline"
+            }
+          } 
+        } 
+
+        let style = `color: ${color}; font-weight: ${fontweight}; font-style: ${fontstyle}; text-decoration: ${decoration};`
+        if(customized) {
+          selection.target.parentNode.dataset.fontweight = fontweight
+          selection.target.parentNode.dataset.fontstyle = fontstyle
+          selection.target.parentNode.dataset.decoration = decoration
+          selection.target.parentNode.style.fontWeight = fontweight
+          selection.target.parentNode.style.fontStyle = fontstyle
+          selection.target.parentNode.style.color = color
+          selection.target.parentNode.style.textDecoration = decoration
+          setSelection(null)
+          return
+        } else {
+          let text = selection?.parentNodeName === "a" ? selection?.target?.innerHTML : selection?.selectedText
+          insert = `<span style="${style}" data-color=${color} data-customized=true data-fontweight=${fontweight} data-fontstyle=${fontstyle} data-decoration=${decoration}><span>${text}</span></span>`
+        }
+
+        let newHTML = `<span>${s1}${insert}${s2}</span>`
+        if(selection?.parentNodeName === "a") {
+          newHTML = insert
+        } 
+        
+        selection.focusNode.nodeValue = ""
+        if(!!selection?.focusNode?.previousSibling || !!selection?.focusNode?.nextSibling) {
+          if(!selection?.focusNode?.previousSibling) {
+            selection.focusNode.nextSibling.insertAdjacentHTML("beforebegin", newHTML)
+          } else {
+            selection.focusNode.previousSibling.insertAdjacentHTML("afterend", newHTML)
+          }
+        } else {
+          selection.target.innerHTML = newHTML
+        }
+      }
+      setSelection(null)
+    } else {
+      let value = data?.styles ? data?.styles[styleKey] !== styleValue ? styleValue : '' : styleValue
+      setData(prev => ({ ...prev, styles: { ...prev?.styles, [styleKey]: value } }))
+    }
   }
 
   const handleResponsiveStyle = (styleKey, breakpoint, value) => {
@@ -61,6 +197,10 @@ export const TextStyles = ({ tool_id, collapse, data, setData }) => {
               active={data?.styles?.textDecoration === "underline"}
               onClick={() => handleSetStyle('textDecoration', 'underline')}
             ><i className="fa-solid fa-underline"></i></IconButton>
+            <AddLinkModal 
+              appendTarget={appendTarget}
+              setAppendTarget={setAppendTarget}
+            />
             <Flex justifyContent="space-evenly">
               <IconButton 
                 active={data?.styles?.textAlign === "left"}
@@ -77,11 +217,16 @@ export const TextStyles = ({ tool_id, collapse, data, setData }) => {
             </Flex>
           </Flex>
           <Flex>
-            <Popover>
+            <Popover
+              isOpen={isOpen}
+              onClose={onClose}
+              placement='right'
+              closeOnBlur={false}
+            >
               <PopoverTrigger>
                 <HStack align="center" spacing={2} >
                   <Text>Color: </Text>
-                  <Box cursor="pointer" boxSize={3} bg={colorPicker?.color}  />
+                  <Box onClick={onToggle} cursor="pointer" boxSize={3} bg={colorPicker?.color}  />
                 </HStack>
               </PopoverTrigger>
               <PopoverContent>
@@ -91,8 +236,12 @@ export const TextStyles = ({ tool_id, collapse, data, setData }) => {
                   <SketchPicker 
                     color={colorPicker?.color}  
                     onChange={(color) => {
-                      setData(prev => ({ ...prev, styles: { ...prev?.styles, color: color.hex } }))
                       setColorPicker(prev => ({ ...prev, color: color.hex }))
+                      if(selection) {
+                        handleSetStyle('color', color.hex)
+                      } else {
+                        setData(prev => ({ ...prev, styles: { ...prev?.styles, color: color.hex } }))
+                      }
                     }}
                   />
                 </PopoverBody>

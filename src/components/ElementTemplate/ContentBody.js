@@ -1,8 +1,9 @@
 import { Box } from "@chakra-ui/react"
 
-export const ContentBody = ({ data, mode, ...rest }) => {
+export const ContentBody = ({ item_id, data, mode, ...rest }) => {
   return (
     <Box
+      id={`section-${item_id}`}
       contentEditable={mode === "edit"}
       fontSize={{base: "3.5897vw", md: "0.9375vw"}}
       lineHeight={{base: "11.5vw", md: "1.875vw"}}

@@ -26,6 +26,7 @@ export const ContentEdit = ({ nested, contents, setContent }) => {
                 nested={nested}
               />
               <RenderContent 
+                item_id={item.item_id}
                 contentData={item?.data}
                 tool_id={item?.tool_id} 
                 mode="edit" 

@@ -4,7 +4,7 @@ import { Rnd } from "react-rnd";
 import { ELEMENT_TEMPLATE, ELEMENT_TOOL, ELEMENT_DEFAULT_DATA } from "constants/tools"
 import { IconButton } from "components/IconButton"
 
-export const RenderContent = ({ contentData, tool_id, mode}) => {
+export const RenderContent = ({ contentData, tool_id, mode, item_id }) => {
   let styles = (contentData && !!contentData?.styles) ? JSON.parse(contentData?.styles) : null
   const [data, setData] = useState( (styles) ? { ...contentData, styles } : ELEMENT_DEFAULT_DATA[tool_id])
   const [collapse, setCollapse] = useState(false)
@@ -17,7 +17,7 @@ export const RenderContent = ({ contentData, tool_id, mode}) => {
         pos="relative" 
         boxShadow={collapse ? "rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px" : "unset"}
      >
-        {data && <Component mode={mode} data={data} />}
+        {data && <Component item_id={item_id} mode={mode} data={data} />}
         {mode === "edit" && 
           <Box 
             pos="absolute"
@@ -44,6 +44,7 @@ export const RenderContent = ({ contentData, tool_id, mode}) => {
                   <i className="fa-solid fa-pen"></i>
                 </IconButton>
                 <ElementTool 
+                  item_id={item_id}
                   tool_id={tool_id}
                   data={data} 
                   setData={setData} 
