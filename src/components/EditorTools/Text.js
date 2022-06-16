@@ -74,6 +74,10 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
   };
 
   const setStyle = (styleKey, styleValue) => {
+    if(!selection) {
+      handleSetStyle(styleKey, styleValue)
+      return
+    }
     if(selection?.startContainer?.data !== selection?.endContainer?.data) {
       var selectionContents = selection.extractContents();
       const fragment = document.createDocumentFragment()
