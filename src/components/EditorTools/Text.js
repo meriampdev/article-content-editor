@@ -29,6 +29,11 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     display: false,
     color: data?.styles?.color ?? "#151515"
   })
+  const [styles, setStyles] = useState({ 
+    fontWeight: 'normal',
+    fontStyle: 'normal',
+    textDecoration: 'none'
+  })
   const [selection, setSelection] = useState(null)
   const [appendTarget, setAppendTarget] = useState(null)
 
@@ -36,7 +41,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     const divArea = document.getElementById(elementID)
     if(!!divArea) {
       divArea.addEventListener('mousedown', (event) => {
-        addSelfDestructiveEventListener(document, 'mouseup', function() {
+        addSelfDestructiveEventListener(divArea, 'mouseup', function() {
           highlighted(event)
         })
       })
@@ -57,6 +62,20 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     } else return;
 
     const range = selected.getRangeAt(0);
+    let selectedText = range?.toString()
+    if(!selectedText) {
+      setStyles({ 
+        fontWeight: 'normal',
+        fontStyle: 'normal',
+        textDecoration: 'none'
+      })
+    } else {
+      let _styles = range?.endContainer?.parentNode?.style
+      const { fontWeight, fontStyle, textDecoration, color } = _styles
+      setStyles({ fontWeight, fontStyle, textDecoration, color })
+      setColorPicker(prev => ({ ...prev, color: color || "#151515" }))
+    }
+
     setAppendTarget(range)
 
     if (!selected.rangeCount) return;
@@ -85,10 +104,13 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
           item.style.fontSize = 'inherit'
           let currentValue = item?.style ? item?.style[styleKey] : ''
           if(styleKey !== "color") {
-            item.style[styleKey] = toggleStyle(styleKey, currentValue)
+            let value = toggleStyle(styleKey, currentValue)
+            item.style[styleKey] = value
+            setStyles(prev => ({ ...prev, [styleKey]: value }))
           } else {
             item.style["color"] = styleValue 
           }
+          
         }
       })
       
@@ -104,7 +126,9 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
         const fragment = document.createDocumentFragment()
         let currentValue = selection.endContainer.parentNode.style[styleKey]
         if(styleKey !== "color") {
-          selection.endContainer.parentNode.style[styleKey] = toggleStyle(styleKey, currentValue)
+          let value = toggleStyle(styleKey, currentValue)
+          selection.endContainer.parentNode.style[styleKey] = value
+          setStyles(prev => ({ ...prev, [styleKey]: value }))
         } else {
           selection.endContainer.parentNode.style["color"] = styleValue 
         }
@@ -114,20 +138,26 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       } else {
         selection.extractContents();
         let span = document.createElement('span')
-        if(styleKey !== "color") {
-          span.style[styleKey] = toggleStyle(styleKey, '')
-        } else {
-          span.style["color"] = styleValue 
-        }
+
+        let value = styleKey !== "color" ? toggleStyle(styleKey, styles[styleKey]) : styleValue
+        let _styles = { ...styles, [styleKey]: value }
+        span.style["fontWeight"] = _styles?.fontWeight
+        span.style["fontStyle"] = _styles?.fontStyle
+        span.style["textDecoration"] = _styles?.textDecoration
+        span.style["color"] = _styles?.color
+        
+        setStyles(prev => ({ ...prev, [styleKey]: value }))
         span.textContent = selectedText
 
         selection.insertNode(span);
       }
     }
 
+    let range = selection.cloneRange();
     const newSelection = window.getSelection();
     newSelection.removeAllRanges();
-    newSelection.addRange(selection);
+    newSelection.addRange(range);
+    setSelection(range)
   }
 
   const handleSetStyle = (styleKey, styleValue) => {
@@ -155,15 +185,15 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
           <Button size="xs" onClick={() => setData(ELEMENT_DEFAULT_DATA[tool_id])}>Reset</Button>
           <Flex flexWrap="wrap" justifyContent="space-evenly">
             <IconButton
-              active={data?.styles?.fontStyle === "italic"}
+              active={(data?.styles?.fontStyle || styles?.fontStyle) === "italic"}
               onClick={() => setStyle('fontStyle', 'italic')}
             ><i className="fa-solid fa-italic"></i></IconButton>
             <IconButton
-              active={data?.styles?.fontWeight === "bold"}
+              active={(data?.styles?.fontWeight || styles?.fontWeight) === "bold"}
               onClick={() => setStyle('fontWeight', 'bold')}
             ><i className="fa-solid fa-bold"></i></IconButton>
             <IconButton
-              active={data?.styles?.textDecoration === "underline"}
+              active={(data?.styles?.textDecoration || styles?.textDecoration) === "underline"}
               onClick={() => setStyle('textDecoration', 'underline')}
             ><i className="fa-solid fa-underline"></i></IconButton>
             <AddLinkModal 
