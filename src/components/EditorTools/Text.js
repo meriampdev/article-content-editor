@@ -20,6 +20,7 @@ import { SketchPicker } from 'react-color';
 import { AddLinkModal } from "components/AddLinkModal"
 import { IconButton } from "components/IconButton"
 import { ELEMENT_DEFAULT_DATA } from "constants/tools"
+import { toggleStyle, styleToString } from "utils/styleHelper"
 
 export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
   const elementID = `section-${item_id}`
@@ -33,18 +34,34 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
 
   useEffect(() => {
     const divArea = document.getElementById(elementID)
-    divArea.addEventListener('input', (e) => {
-      let childNodes = e?.target?.childNodes
-      childNodes.forEach((node, i) => {
-        node.addEventListener('mousedown', function(event) {
-          // This will only run the event once and then remove itself
-          addSelfDestructiveEventListener(document, 'mouseup', function() {
-            mySelection(i, event)
-          })
-        });
+    divArea.addEventListener('mousedown', (event) => {
+      addSelfDestructiveEventListener(document, 'mouseup', function() {
+        highlighted(event)
       })
     })
   }, [])
+  
+  const highlighted = (event) => {
+    var selected = '';
+    if (window.getSelection) {
+      selected = window.getSelection();
+    }
+    else if (document.getSelection) {
+      selected = document.getSelection();
+    }
+    else if (document.selection) {
+      selected = document.selection.createRange()
+    } else return;
+
+    const range = selected.getRangeAt(0);
+    if(selected?.type === "Caret") {
+      setAppendTarget(range)
+      return
+    }
+
+    if (!selected.rangeCount) return;
+    setSelection(range)
+  }
 
   const addSelfDestructiveEventListener = (element, eventType, callback) => {
     let handler = () => {
@@ -54,116 +71,55 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     element.addEventListener(eventType, handler);
   };
 
-  const mySelection = (nodeIndex, event) => {
-    var sel = document.getSelection();
-    let startPos = sel?.anchorOffset;
-    let endPos = sel?.extentOffset;
-    let wholeString = sel?.focusNode?.wholeText
-    let selectedText = sel?.focusNode?.wholeText?.substring(startPos, endPos);
-  
-    // if highlighted backwards
-    if(startPos > endPos) {
-      startPos = sel?.extentOffset 
-      endPos = sel?.anchorOffset
-    }
+  const setStyle = (styleKey, styleValue) => {
+    if(selection?.startContainer?.data !== selection?.endContainer?.data) {
+      var selectionContents = selection.extractContents();
+      const fragment = document.createDocumentFragment()
+      selectionContents?.childNodes?.forEach((item) => {
+        let currentValue = item?.style ? item?.style[styleKey] : ''
+        if(styleKey !== "color") {
+          item.style[styleKey] = toggleStyle(styleKey, currentValue)
+        } else {
+          item.style["color"] = styleValue 
+        }
+      })
+      
+      fragment.appendChild(selectionContents);
+      selection.insertNode(fragment);
+    } else {
+      let startPos = selection?.startOffset;
+      let endPos = selection?.endOffset;
+      let wholeString = selection?.endContainer?.wholeText
+      let selectedText = wholeString?.substring(startPos, endPos);
 
-    if(sel?.type === "Caret") {
-      setAppendTarget(event?.target)
-    }
+      if(!selectedText) {
+        return
+      }
 
-    if(selectedText?.length <= 0) {
-      setSelection(null)
-      return; // stop here if selection length is <= 0
-    }
+      let s1 = wholeString?.substring(0, startPos)
+      let s2 = wholeString?.substring(endPos, wholeString?.length)
 
-    const parentNodeName = sel?.focusNode?.parentNode?.localName
-    const selData = { 
-      startPos, 
-      endPos, 
-      selectedText, 
-      wholeString, 
-      nodeIndex, 
-      parentNodeName,
-      focusNode: sel?.focusNode,
-      target: event?.target
+      let start = s1 ? `<span>${s1}</span>` : ''
+      let end = s1 ? `<span>${s2}</span>` : ''
+
+      const { fontWeight, fontStyle, color, textDecoration } = selection.endContainer.parentNode.style
+      let _style = Object.assign({}, { fontWeight, fontStyle, color, textDecoration })
+      let currentValue = _style[styleKey]
+      if(styleKey !== "color") {
+        _style[styleKey] = toggleStyle(styleKey, currentValue)
+      } else {
+        _style["color"] = styleValue 
+      }
+
+      let style = styleToString(_style)
+      let newHTML = `${start}<span style="${style}">${selectedText}</span>${end}`
+      selection.endContainer.parentNode.innerHTML = newHTML
     }
-    
-    if(selectedText) {
-      setSelection(selData)
-    } 
-  };
+  }
 
   const handleSetStyle = (styleKey, styleValue) => {
-    if(selection) {
-      let s1 = selection?.wholeString?.substring(0, selection?.startPos)
-      let s2 = selection?.wholeString?.substring(selection?.endPos, selection?.wholeString?.length)
-      const divArea = document.getElementById(elementID)
-      if(divArea?.childNodes) {
-        let insert = ''
-        let fontweight = selection?.target?.parentNode?.dataset?.fontweight
-        let fontstyle = selection?.target?.parentNode?.dataset?.fontstyle
-        let decoration = selection?.target?.parentNode?.dataset?.decoration
-        let color = styleValue
-        let customized = selection?.target?.parentNode?.dataset?.customized
-        if(styleKey !== "color") {
-          if(styleValue === "bold") {
-            if(fontweight === "bold") {
-              fontweight = "normal"
-            } else {
-              fontweight = "bold"
-            }
-          } else if(styleValue === "italic") {
-            if(fontstyle === "italic") {
-              fontstyle = "normal"
-            } else {
-              fontstyle = "italic"
-            }
-          } else if(styleValue === "underline") {
-            if(decoration === "underline") {
-              decoration = "none"
-            } else {
-              decoration = "underline"
-            }
-          } 
-        } 
-
-        let style = `color: ${color}; font-weight: ${fontweight}; font-style: ${fontstyle}; text-decoration: ${decoration};`
-        if(customized) {
-          selection.target.parentNode.dataset.fontweight = fontweight
-          selection.target.parentNode.dataset.fontstyle = fontstyle
-          selection.target.parentNode.dataset.decoration = decoration
-          selection.target.parentNode.style.fontWeight = fontweight
-          selection.target.parentNode.style.fontStyle = fontstyle
-          selection.target.parentNode.style.color = color
-          selection.target.parentNode.style.textDecoration = decoration
-          setSelection(null)
-          return
-        } else {
-          let text = selection?.parentNodeName === "a" ? selection?.target?.innerHTML : selection?.selectedText
-          insert = `<span style="${style}" data-color=${color} data-customized=true data-fontweight=${fontweight} data-fontstyle=${fontstyle} data-decoration=${decoration}><span>${text}</span></span>`
-        }
-
-        let newHTML = `<span>${s1}${insert}${s2}</span>`
-        if(selection?.parentNodeName === "a") {
-          newHTML = insert
-        } 
-        
-        selection.focusNode.nodeValue = ""
-        if(!!selection?.focusNode?.previousSibling || !!selection?.focusNode?.nextSibling) {
-          if(!selection?.focusNode?.previousSibling) {
-            selection.focusNode.nextSibling.insertAdjacentHTML("beforebegin", newHTML)
-          } else {
-            selection.focusNode.previousSibling.insertAdjacentHTML("afterend", newHTML)
-          }
-        } else {
-          selection.target.innerHTML = newHTML
-        }
-      }
-      setSelection(null)
-    } else {
-      let value = data?.styles ? data?.styles[styleKey] !== styleValue ? styleValue : '' : styleValue
-      setData(prev => ({ ...prev, styles: { ...prev?.styles, [styleKey]: value } }))
-    }
+    let value = data?.styles ? data?.styles[styleKey] !== styleValue ? styleValue : '' : styleValue
+    setData(prev => ({ ...prev, styles: { ...prev?.styles, [styleKey]: value } }))
   }
 
   const handleResponsiveStyle = (styleKey, breakpoint, value) => {
@@ -187,15 +143,15 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
           <Flex flexWrap="wrap" justifyContent="space-evenly">
             <IconButton
               active={data?.styles?.fontStyle === "italic"}
-              onClick={() => handleSetStyle('fontStyle', 'italic')}
+              onClick={() => setStyle('fontStyle', 'italic')}
             ><i className="fa-solid fa-italic"></i></IconButton>
             <IconButton
               active={data?.styles?.fontWeight === "bold"}
-              onClick={() => handleSetStyle('fontWeight', 'bold')}
+              onClick={() => setStyle('fontWeight', 'bold')}
             ><i className="fa-solid fa-bold"></i></IconButton>
             <IconButton
               active={data?.styles?.textDecoration === "underline"}
-              onClick={() => handleSetStyle('textDecoration', 'underline')}
+              onClick={() => setStyle('textDecoration', 'underline')}
             ><i className="fa-solid fa-underline"></i></IconButton>
             <AddLinkModal 
               appendTarget={appendTarget}
@@ -238,7 +194,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
                     onChange={(color) => {
                       setColorPicker(prev => ({ ...prev, color: color.hex }))
                       if(selection) {
-                        handleSetStyle('color', color.hex)
+                        setStyle('color', color.hex)
                       } else {
                         setData(prev => ({ ...prev, styles: { ...prev?.styles, color: color.hex } }))
                       }

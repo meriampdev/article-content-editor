@@ -34,7 +34,9 @@ export const AddLinkModal = ({ appendTarget, setAppendTarget }) => {
     a.target = link?.target
 
     span.appendChild(a)
-    appendTarget?.appendChild(span)
+
+    appendTarget.insertNode(span);
+    // appendTarget?.appendChild(span)
     setAppendTarget(null)
 
     onClose()
