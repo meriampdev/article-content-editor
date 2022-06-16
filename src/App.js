@@ -155,7 +155,7 @@ function App() {
         {
           showTopicIdInput && 
           <>
-            <Input maxW="10vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
+            <Input maxW="5vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
             <Button 
               disabled={!topicId}
               onClick={handlePreview}

@@ -34,11 +34,13 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
 
   useEffect(() => {
     const divArea = document.getElementById(elementID)
-    divArea.addEventListener('mousedown', (event) => {
-      addSelfDestructiveEventListener(document, 'mouseup', function() {
-        highlighted(event)
+    if(!!divArea) {
+      divArea.addEventListener('mousedown', (event) => {
+        addSelfDestructiveEventListener(document, 'mouseup', function() {
+          highlighted(event)
+        })
       })
-    })
+    }
   }, [])
   
   const highlighted = (event) => {
@@ -76,6 +78,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       var selectionContents = selection.extractContents();
       const fragment = document.createDocumentFragment()
       selectionContents?.childNodes?.forEach((item) => {
+        item.style.fontSize = 'inherit'
         let currentValue = item?.style ? item?.style[styleKey] : ''
         if(styleKey !== "color") {
           item.style[styleKey] = toggleStyle(styleKey, currentValue)
@@ -91,7 +94,9 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       let endPos = selection?.endOffset;
       let wholeString = selection?.endContainer?.wholeText
       let selectedText = wholeString?.substring(startPos, endPos);
-
+      console.log('selection', selection)
+      console.log('startPos', startPos)
+      console.log('endPos', endPos)
       if(!selectedText) {
         return
       }
@@ -101,7 +106,8 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
 
       let start = s1 ? `<span>${s1}</span>` : ''
       let end = s1 ? `<span>${s2}</span>` : ''
-
+      console.log('wholeString', wholeString)
+      console.log('s1', s1)
       const { fontWeight, fontStyle, color, textDecoration } = selection.endContainer.parentNode.style
       let _style = Object.assign({}, { fontWeight, fontStyle, color, textDecoration })
       let currentValue = _style[styleKey]
