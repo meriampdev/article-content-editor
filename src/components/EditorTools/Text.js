@@ -76,6 +76,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       handleSetStyle(styleKey, styleValue)
       return
     }
+
     if(selection?.startContainer?.data !== selection?.endContainer?.data) {
       var selectionContents = selection.extractContents();
       const fragment = document.createDocumentFragment()
@@ -94,6 +95,8 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     } else {
      
       let selectedText = selection?.toString()
+      if(!selectedText) return 
+
       if(selectedText === selection?.endContainer?.wholeText) {
         let selectionContents = selection.extractContents();
         const fragment = document.createDocumentFragment()
@@ -119,6 +122,8 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
         selection.insertNode(span);
       }
     }
+
+    setSelection(null)
   }
 
   const handleSetStyle = (styleKey, styleValue) => {
