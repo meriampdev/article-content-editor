@@ -81,12 +81,14 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       var selectionContents = selection.extractContents();
       const fragment = document.createDocumentFragment()
       selectionContents?.childNodes?.forEach((item) => {
-        item.style.fontSize = 'inherit'
-        let currentValue = item?.style ? item?.style[styleKey] : ''
-        if(styleKey !== "color") {
-          item.style[styleKey] = toggleStyle(styleKey, currentValue)
-        } else {
-          item.style["color"] = styleValue 
+        if(item?.style) {
+          item.style.fontSize = 'inherit'
+          let currentValue = item?.style ? item?.style[styleKey] : ''
+          if(styleKey !== "color") {
+            item.style[styleKey] = toggleStyle(styleKey, currentValue)
+          } else {
+            item.style["color"] = styleValue 
+          }
         }
       })
       
@@ -123,7 +125,9 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       }
     }
 
-    setSelection(null)
+    const newSelection = window.getSelection();
+    newSelection.removeAllRanges();
+    newSelection.addRange(selection);
   }
 
   const handleSetStyle = (styleKey, styleValue) => {
