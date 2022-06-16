@@ -20,7 +20,7 @@ import { SketchPicker } from 'react-color';
 import { AddLinkModal } from "components/AddLinkModal"
 import { IconButton } from "components/IconButton"
 import { ELEMENT_DEFAULT_DATA } from "constants/tools"
-import { toggleStyle, styleToString } from "utils/styleHelper"
+import { toggleStyle } from "utils/styleHelper"
 
 export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
   const elementID = `section-${item_id}`
@@ -41,6 +41,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
         })
       })
     }
+  // eslint-disable-next-line
   }, [])
   
   const highlighted = (event) => {
@@ -56,10 +57,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     } else return;
 
     const range = selected.getRangeAt(0);
-    if(selected?.type === "Caret") {
-      setAppendTarget(range)
-      return
-    }
+    setAppendTarget(range)
 
     if (!selected.rangeCount) return;
     setSelection(range)
@@ -94,31 +92,32 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       fragment.appendChild(selectionContents);
       selection.insertNode(fragment);
     } else {
-      let startPos = selection?.startOffset;
-      let endPos = selection?.endOffset;
-      let wholeString = selection?.endContainer?.wholeText
-      let selectedText = wholeString?.substring(startPos, endPos);
-      if(!selectedText) {
-        return
-      }
+     
+      let selectedText = selection?.toString()
+      if(selectedText === selection?.endContainer?.wholeText) {
+        let selectionContents = selection.extractContents();
+        const fragment = document.createDocumentFragment()
+        let currentValue = selection.endContainer.parentNode.style[styleKey]
+        if(styleKey !== "color") {
+          selection.endContainer.parentNode.style[styleKey] = toggleStyle(styleKey, currentValue)
+        } else {
+          selection.endContainer.parentNode.style["color"] = styleValue 
+        }
 
-      let s1 = wholeString?.substring(0, startPos)
-      let s2 = wholeString?.substring(endPos, wholeString?.length)
-
-      let start = s1 ? `<span>${s1}</span>` : ''
-      let end = s2 ? `<span>${s2}</span>` : ''
-      const { fontWeight, fontStyle, color, textDecoration } = selection.endContainer.parentNode.style
-      let _style = Object.assign({}, { fontWeight, fontStyle, color, textDecoration })
-      let currentValue = _style[styleKey]
-      if(styleKey !== "color") {
-        _style[styleKey] = toggleStyle(styleKey, currentValue)
+        fragment.appendChild(selectionContents);
+        selection.insertNode(fragment);
       } else {
-        _style["color"] = styleValue 
-      }
+        selection.extractContents();
+        let span = document.createElement('span')
+        if(styleKey !== "color") {
+          span.style[styleKey] = toggleStyle(styleKey, '')
+        } else {
+          span.style["color"] = styleValue 
+        }
+        span.textContent = selectedText
 
-      let style = styleToString(_style)
-      let newHTML = `${start}<span style="${style}">${selectedText}</span>${end}`
-      selection.endContainer.parentNode.innerHTML = newHTML
+        selection.insertNode(span);
+      }
     }
   }
 

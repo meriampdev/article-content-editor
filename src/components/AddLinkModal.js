@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
   Button,
   Modal,
@@ -19,13 +19,22 @@ import { IconButton } from "components/IconButton"
 export const AddLinkModal = ({ appendTarget, setAppendTarget }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [link, setLink] = useState({
-    text: "",
+    text: appendTarget?.toString(),
     link: "",
     target: "_blank"
   })
 
+  useEffect(() => {
+    let selectedText = appendTarget?.toString()
+    if(selectedText) {
+      setLink(prev => ({ ...prev, text: selectedText }))
+    }
+  }, [appendTarget])
+
   const pasteHtmlAtCaret = () => {
+    appendTarget.extractContents();
     let span = document.createElement('span')
+    span.style.fontWeight = "bold"
     let a = document.createElement('a');
     let linkText = document.createTextNode(link?.text);
     a.appendChild(linkText);
@@ -36,9 +45,8 @@ export const AddLinkModal = ({ appendTarget, setAppendTarget }) => {
     span.appendChild(a)
 
     appendTarget.insertNode(span);
-    // appendTarget?.appendChild(span)
-    setAppendTarget(null)
-
+    
+    setLink({ text: "", link: "", target: "_blank" })
     onClose()
   }
 

@@ -5,7 +5,8 @@ export const Heading4 = ({ data, mode }) => {
     <Box
       key="heading2"
       width="100%"
-      height={{ base: "14.615vw", md: "3.6354vw", "2xl": "4.6354vw" }}
+      minHeight={{ base: "14.615vw", md: "3.6354vw", "2xl": "4.6354vw" }}
+      height="auto"
       display="flex"
       alignItems="center"
       justifyContent="flex-start"

@@ -6,7 +6,8 @@ export const Heading3 = ({ data, mode }) => {
       key="heading3"
       bg="#F3F3F3"
       width="100%"
-      height={{ base: "14.615vw", md: "4.6354vw" }}
+      minHeight={{ base: "14.615vw", md: "4.6354vw" }}
+      height="auto"
       display="flex"
       alignItems="center"
       justifyContent="flex-start"
