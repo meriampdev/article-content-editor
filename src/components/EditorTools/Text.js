@@ -94,9 +94,6 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       let endPos = selection?.endOffset;
       let wholeString = selection?.endContainer?.wholeText
       let selectedText = wholeString?.substring(startPos, endPos);
-      console.log('selection', selection)
-      console.log('startPos', startPos)
-      console.log('endPos', endPos)
       if(!selectedText) {
         return
       }
@@ -105,9 +102,7 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
       let s2 = wholeString?.substring(endPos, wholeString?.length)
 
       let start = s1 ? `<span>${s1}</span>` : ''
-      let end = s1 ? `<span>${s2}</span>` : ''
-      console.log('wholeString', wholeString)
-      console.log('s1', s1)
+      let end = s2 ? `<span>${s2}</span>` : ''
       const { fontWeight, fontStyle, color, textDecoration } = selection.endContainer.parentNode.style
       let _style = Object.assign({}, { fontWeight, fontStyle, color, textDecoration })
       let currentValue = _style[styleKey]
