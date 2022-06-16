@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import { 
   Collapse,
-  Button,
   Box, 
   Flex, 
   Input,
@@ -19,10 +18,9 @@ import {
 import { SketchPicker } from 'react-color';
 import { AddLinkModal } from "components/AddLinkModal"
 import { IconButton } from "components/IconButton"
-import { ELEMENT_DEFAULT_DATA } from "constants/tools"
 import { toggleStyle } from "utils/styleHelper"
 
-export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
+export const TextStyles = ({ item_id, collapse, data, setData }) => {
   const elementID = `section-${item_id}`
   const { isOpen, onToggle, onClose } = useDisclosure()
   const [colorPicker, setColorPicker] = useState({
@@ -182,7 +180,6 @@ export const TextStyles = ({ item_id, tool_id, collapse, data, setData }) => {
     <Box boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px" minW={collapse ? "20vw" : "unset"}>
       <Collapse mt={4} in={collapse} >
         <Box p={2}>
-          <Button size="xs" onClick={() => setData(ELEMENT_DEFAULT_DATA[tool_id])}>Reset</Button>
           <Flex flexWrap="wrap" justifyContent="space-evenly">
             <IconButton
               active={(data?.styles?.fontStyle || styles?.fontStyle) === "italic"}

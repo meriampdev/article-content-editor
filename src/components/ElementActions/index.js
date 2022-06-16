@@ -1,33 +1,20 @@
-import { Box } from "@chakra-ui/react"
+import { HStack, Button } from "@chakra-ui/react"
 import { ReorderElement } from "./ReorderElement"
+import { ELEMENT_DEFAULT_DATA } from "constants/tools"
 
-export const ElementActions = ({ index, contents, setContent }) => {
+export const ElementActions = ({ setData, tool_id, index, contents, setContent, collapse }) => {
   
   const handleRemove = () => {
     let arr = [...contents]
     let newarr = arr.filter((f, i) => i !== index)
     setContent(newarr)
   }
-  
-  return (  
-    <Box 
-      pos="absolute"
-      top="0"
-      left="-5.3vw"
-      height="100%"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      pr={1}
-      borderRight="1px solid #1CBF73"
-      className="element-actions"
-    >
-      <Box cursor="pointer" color="red" _hover={{ color: "red" }}>
-        <i onClick={handleRemove} className="fa-solid fa-circle-minus"></i>
-      </Box>
-      <Box ml={3} mr={5}>
-        <ReorderElement currIndex={index} contents={contents} setContent={setContent} />
-      </Box>
-    </Box>
+
+  return (
+    <HStack width="100%" display={collapse ? 'flex' : 'none'} justifyContent="flex-start">
+      <Button size="xs" onClick={() => setData(ELEMENT_DEFAULT_DATA[tool_id])}>Reset</Button>
+      <ReorderElement currIndex={index} contents={contents} setContent={setContent} />
+      <Button color="red" size="xs" onClick={handleRemove}>Delete</Button>
+    </HStack>
   )
 }

@@ -1,3 +1,4 @@
+import { Box, Text } from "@chakra-ui/react"
 import {
   ButtonTool,
   HTMLEditor,
@@ -31,10 +32,10 @@ export const TOOLIDS = [
 ]
 
 export const TOOL_ICONS = {
-  "h1": <Heading1 />,
-  "h2": <Heading2 />,
-  "h3": <Heading3 />,
-  "h4": <Heading4 />,
+  "h1": <Text>H1</Text>,
+  "h2": <Text textDecoration="underline">H2</Text>,
+  "h3": <Box p={3} bg="#F3F3F3"><Text>H3</Text></Box>,
+  "h4": <Box borderLeft="2px solid"><Text pl={2}>H4</Text></Box>,
   "content-text": <ContentBody />,
   "image": <i className="fa-solid fa-image"></i>,
   "section": <i className="fa-solid fa-code"></i>,

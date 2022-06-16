@@ -117,9 +117,10 @@ function App() {
   }
 
   return (
-    <Box minH="100vh" p="1vw 3vw">
-      <HStack spacing={3}>
+    <Box minH="100vh" p="0 3vw" pb="25vw">
+      <HStack spacing={3} py="0.8vw" mb="1vw" boxShadow="rgba(0, 0, 0, 0.45) 0px 14px 20px -20px">
         <Button 
+          size="sm"
           onClick={handleGetJsonObject}
           data-tooltip-show={copied}
           data-tooltip="Copied!"
@@ -127,6 +128,7 @@ function App() {
           data-tooltip-type="success"
         >Get Content</Button>
         <Button 
+          size="sm"
           onClick={handleSave}
           disabled={content?.length <= 0}
           pointerEvents={content?.length <= 0 ? "none" : "all"}
@@ -137,6 +139,7 @@ function App() {
           data-tooltip-type="success"
         >Save</Button>
         <Button 
+          size="sm"
           onClick={clearSaved}
           disabled={content?.length <= 0}
           pointerEvents={content?.length <= 0 ? "none" : "all"}
@@ -147,6 +150,7 @@ function App() {
           data-tooltip-type="success"
         >Clear Saved</Button>
         <Button 
+          size="sm"
           onClick={() => setShow(!showTopicIdInput)}
           disabled={content?.length <= 0}
           pointerEvents={content?.length <= 0 ? "none" : "all"}
@@ -155,8 +159,9 @@ function App() {
         {
           showTopicIdInput && 
           <>
-            <Input maxW="5vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
+            <Input size="sm" maxW="6vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
             <Button 
+              size="sm"
               disabled={!topicId}
               onClick={handlePreview}
               isLoading={loadingPreview}
@@ -165,17 +170,18 @@ function App() {
           </>
         }
         <Button 
+          size="sm"
           onClick={handleLoadData}
         >Load Data</Button>
-        <Input maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
+        <Input size="sm" maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
       </HStack>
       <ContentEdit contents={content} setContent={setContent} />
-      <Box my={10}>
+      <Box>
         <Rnd 
           dragHandleClassName="drag-handle"
           default={{
             x: 1200,
-            y: 5,
+            y: 0,
           }}
         >
           <Editor count={content.length} setContent={setContent} />

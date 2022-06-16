@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { 
-  Box,
+  Button,
   Popover,
   PopoverTrigger,
   PopoverContent,
@@ -31,6 +31,13 @@ export const ReorderElement = ({ contents, setContent, currIndex }) => {
     let to = toIndex - 1
     cleanarr.insert(to, moveElement)
     setContent(cleanarr)
+    onClose()
+    setTimeout(() => {
+      var element = document.getElementById(moveElement?.item_id);
+      if(element) {
+        element.scrollIntoView({behavior: "smooth"})
+      } 
+    }, 100)
   }
 
   const handleInputChange = (str, num) => {
@@ -43,13 +50,12 @@ export const ReorderElement = ({ contents, setContent, currIndex }) => {
       isOpen={isOpen}
       onOpen={onOpen}
       onClose={onClose}
+      maxW="15vw"
     >
       <PopoverTrigger>
-        <Box onClick={onToggle} cursor="pointer" color="#1CBF73" _hover={{ opacity: 0.8 }}>
-          <i className="fa-solid fa-arrow-down-9-1"></i>
-        </Box>
+        <Button onClick={onToggle} size="xs">Move To</Button>
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent maxW="12vw">
         <PopoverArrow />
         <PopoverBody>
           <NumberInput 
@@ -58,8 +64,11 @@ export const ReorderElement = ({ contents, setContent, currIndex }) => {
             max={contents?.length}
             value={toIndex}
             onChange={handleInputChange}
+            size="sm"
+            maxW="10vw"
           >
             <NumberInputField 
+              size="xs"
               placeholder="move to position" 
               onKeyDown={(e) => {
                 if(e?.key === "Enter") {

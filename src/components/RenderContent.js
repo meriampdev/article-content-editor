@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { Box, HStack } from "@chakra-ui/react"
+import { Box, HStack, VStack, Text } from "@chakra-ui/react"
 import { Rnd } from "react-rnd";
 import { ELEMENT_TEMPLATE, ELEMENT_TOOL, ELEMENT_DEFAULT_DATA } from "constants/tools"
 import { IconButton } from "components/IconButton"
+import { ElementActions } from "components/ElementActions"
 
-export const RenderContent = ({ contentData, tool_id, mode, item_id }) => {
+export const RenderContent = ({ index, contents, setContent, contentData, tool_id, mode, item_id }) => {
   let styles = (contentData && !!contentData?.styles) ? JSON.parse(contentData?.styles) : null
   const [data, setData] = useState( (styles) ? { ...contentData, styles } : ELEMENT_DEFAULT_DATA[tool_id])
   const [collapse, setCollapse] = useState(false)
@@ -33,6 +34,7 @@ export const RenderContent = ({ contentData, tool_id, mode, item_id }) => {
             >
               <HStack 
                 alignItems="flex-start"
+                justifyContent="center"
                 bg={collapse ? "#FFF" : ""}
               >
                 <IconButton 
@@ -40,17 +42,29 @@ export const RenderContent = ({ contentData, tool_id, mode, item_id }) => {
                   className="drag-handle"
                   color={collapse ? "green" : ""}
                   minW={10}
+                  size="xs"
                 >
-                  <i className="fa-solid fa-pen"></i>
+                  <Text as="i" className="fa-solid fa-pen" fontSize="xs" />
+                  {/* <i className="fa-solid fa-pen"></i> */}
                 </IconButton>
-                <ElementTool 
-                  item_id={item_id}
-                  tool_id={tool_id}
-                  data={data} 
-                  setData={setData} 
-                  collapse={collapse}
-                  setCollapse={setCollapse}
-                />
+                <VStack>
+                  <ElementActions 
+                    setData={setData}
+                    tool_id={tool_id}
+                    index={index}
+                    contents={contents}
+                    setContent={setContent}
+                    collapse={collapse}
+                  />
+                  <ElementTool 
+                    item_id={item_id}
+                    tool_id={tool_id}
+                    data={data} 
+                    setData={setData} 
+                    collapse={collapse}
+                    setCollapse={setCollapse}
+                  />
+                </VStack>
               </HStack>
             </Rnd>
           </Box>

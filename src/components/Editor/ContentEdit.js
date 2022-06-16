@@ -1,10 +1,9 @@
 import { Box } from "@chakra-ui/react"
 import { RenderContent } from "components/RenderContent"
-import { ElementActions } from "components/ElementActions"
 
 export const ContentEdit = ({ nested, contents, setContent }) => {
   return (
-    <Box py={5} pl={10}>
+    <Box py={5} pl={1}>
       <Box 
         id="content-display" 
         bg="#FFF" 
@@ -19,13 +18,21 @@ export const ContentEdit = ({ nested, contents, setContent }) => {
               id={item.item_id}
               className="content-row"
             >
-              <ElementActions 
+              <Box 
+                className="content-line"
+                pos="absolute"
+                top="0"
+                left="-1vw"
+                height="100%"
+                pr={1}
+                borderRight="1px solid #1CBF73"
+              />
+              <RenderContent 
                 contents={contents}
                 setContent={setContent}
                 index={index}
                 nested={nested}
-              />
-              <RenderContent 
+
                 item_id={item.item_id}
                 contentData={item?.data}
                 tool_id={item?.tool_id} 

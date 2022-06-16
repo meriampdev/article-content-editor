@@ -96,10 +96,10 @@ code {
 }
 .content-row:before {
   position: absolute;
-  left: -1.5vw;
+  left: -2.5vw;
   top: 0;
   content: counter(line-number);
-  text-align: right;
+  text-align: left;
   font-size: 12px;
 }
 

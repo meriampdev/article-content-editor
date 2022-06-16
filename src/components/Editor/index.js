@@ -14,8 +14,8 @@ export const Editor = ({ count, setContent, dragHandleClass, fontSize, boxSize }
   const [atIndex, setAtIndex] = useState("")
 
   const handleAddElement = (id) => {
-    let newItem = { tool_id: id, item_id: uuidv4() }
-    
+    let item_id = uuidv4()
+    let newItem = { tool_id: id, item_id: item_id }
     if(atIndex) {
       let index = parseInt(atIndex)
       setContent((pre) => {
@@ -31,6 +31,12 @@ export const Editor = ({ count, setContent, dragHandleClass, fontSize, boxSize }
     } else {
       setContent(prev => [...prev, newItem])
     }
+    setTimeout(() => {
+      var element = document.getElementById(item_id);
+      if(element) {
+        element.scrollIntoView({behavior: "smooth"})
+      } 
+    }, 100)
   }
 
   const handleSetIndex = (value) => {
@@ -61,7 +67,7 @@ export const Editor = ({ count, setContent, dragHandleClass, fontSize, boxSize }
       ><i className="fa-solid fa-screwdriver-wrench"></i></Box>
       <Collapse mt={4} in={collapse} >
         <Box 
-          p={3}
+          p={1}
           bg="#FFF"
         >
           <VStack spacing={2}>
@@ -75,7 +81,7 @@ export const Editor = ({ count, setContent, dragHandleClass, fontSize, boxSize }
             />
             {TOOLIDS.map((tool_id) => {
               return (
-                <IconButton onClick={() => handleAddElement(tool_id)} key={tool_id}>
+                <IconButton minW="3vw" minH="3vw" py={2} onClick={() => handleAddElement(tool_id)} key={tool_id}>
                   {TOOL_ICONS[tool_id]}
                 </IconButton>
               )
