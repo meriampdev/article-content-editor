@@ -119,7 +119,7 @@ export const ELEMENT_DEFAULT_DATA = {
     width: { base: "100%", md: "100%" },
     src: "https://img.stg.skettt.com/images/watanabe/topics/3/image.png",
     styles: {
-      marginTop: { base: "1vw", md: "1vw" },
+      marginTop: { base: "1vw", md: "3vw" },
       marginBottom: { base: "1vw", md: "1vw" }
     }
   },
