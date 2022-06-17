@@ -173,71 +173,73 @@ function App() {
   }
 
   return (
-    <Box minH="100vh" p="0 3vw" pb="25vw">
-      <HStack spacing={3} py="0.8vw" mb="1vw" boxShadow="rgba(0, 0, 0, 0.45) 0px 14px 20px -20px">
-        <Button 
-          size="sm"
-          onClick={handleGetJsonObject}
-          data-tooltip-show={copied}
-          data-tooltip="Copied!"
-          data-tooltip-location="bottom"
-          data-tooltip-type="success"
-        >Get Content</Button>
-        <Button 
-          size="sm"
-          onClick={handleSave}
-          disabled={content?.length <= 0}
-          pointerEvents={content?.length <= 0 ? "none" : "all"}
-          opacity={content?.length <= 0 ? 0.4 : 1}
-          data-tooltip-show={saved}
-          data-tooltip="Saved!"
-          data-tooltip-location="bottom"
-          data-tooltip-type="success"
-        >Save</Button>
-        <Button 
-          size="sm"
-          onClick={clearSaved}
-          disabled={content?.length <= 0}
-          pointerEvents={content?.length <= 0 ? "none" : "all"}
-          opacity={content?.length <= 0 ? 0.4 : 1}
-          data-tooltip-show={cleared}
-          data-tooltip="Cleared!"
-          data-tooltip-location="bottom"
-          data-tooltip-type="success"
-        >Clear Saved</Button>
-        <Button 
-          size="sm"
-          onClick={handleEmulateMobile}
-          disabled={content?.length <= 0}
-          pointerEvents={content?.length <= 0 ? "none" : "all"}
-          opacity={content?.length <= 0 ? 0.4 : 1}
-        >Emulate Mobile</Button>
-        <Button 
-          size="sm"
-          onClick={() => setShow(!showTopicIdInput)}
-          disabled={content?.length <= 0}
-          pointerEvents={content?.length <= 0 ? "none" : "all"}
-          opacity={content?.length <= 0 ? 0.4 : 1}
-        >Preview</Button>
-        {
-          showTopicIdInput && 
-          <>
-            <Input size="sm" maxW="6vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
-            <Button 
-              size="sm"
-              disabled={!topicId}
-              onClick={handlePreview}
-              isLoading={loadingPreview}
-              loadingText="Go"
-            >Go</Button>
-          </>
-        }
-        <Button 
-          size="sm"
-          onClick={handleLoadData}
-        >Load Data</Button>
-        <Input size="sm" maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
-      </HStack>
+    <Box pos="relative" minH="100vh" p="0 3vw" pb="25vw">
+      <Box backgroundColor="#FFFF" pos="sticky" top="0" zIndex="100">
+        <HStack spacing={3} py="0.8vw" mb="1vw" backgroundColor="#FFFF" boxShadow="rgba(0, 0, 0, 0.45) 0px 14px 20px -20px">
+          <Button 
+            size="sm"
+            onClick={handleGetJsonObject}
+            data-tooltip-show={copied}
+            data-tooltip="Copied!"
+            data-tooltip-location="bottom"
+            data-tooltip-type="success"
+          >Get Content</Button>
+          <Button 
+            size="sm"
+            onClick={handleSave}
+            disabled={content?.length <= 0}
+            pointerEvents={content?.length <= 0 ? "none" : "all"}
+            opacity={content?.length <= 0 ? 0.4 : 1}
+            data-tooltip-show={saved}
+            data-tooltip="Saved!"
+            data-tooltip-location="bottom"
+            data-tooltip-type="success"
+          >Save</Button>
+          <Button 
+            size="sm"
+            onClick={clearSaved}
+            disabled={content?.length <= 0}
+            pointerEvents={content?.length <= 0 ? "none" : "all"}
+            opacity={content?.length <= 0 ? 0.4 : 1}
+            data-tooltip-show={cleared}
+            data-tooltip="Cleared!"
+            data-tooltip-location="bottom"
+            data-tooltip-type="success"
+          >Clear Saved</Button>
+          <Button 
+            size="sm"
+            onClick={handleEmulateMobile}
+            disabled={content?.length <= 0}
+            pointerEvents={content?.length <= 0 ? "none" : "all"}
+            opacity={content?.length <= 0 ? 0.4 : 1}
+          >Emulate Mobile</Button>
+          <Button 
+            size="sm"
+            onClick={() => setShow(!showTopicIdInput)}
+            disabled={content?.length <= 0}
+            pointerEvents={content?.length <= 0 ? "none" : "all"}
+            opacity={content?.length <= 0 ? 0.4 : 1}
+          >Preview</Button>
+          {
+            showTopicIdInput && 
+            <>
+              <Input size="sm" maxW="6vw" placeholder="Topic Id" value={topicId} onChange={(e) => setTopicId(e?.target?.value)} />
+              <Button 
+                size="sm"
+                disabled={!topicId}
+                onClick={handlePreview}
+                isLoading={loadingPreview}
+                loadingText="Go"
+              >Go</Button>
+            </>
+          }
+          <Button 
+            size="sm"
+            onClick={handleLoadData}
+          >Load Data</Button>
+          <Input size="sm" maxW="20vw" placeholder="Load Data" value={dataInput} onChange={(e) => setDataInput(e?.target?.value)} />
+        </HStack>
+      </Box>
       <ContentEdit contents={content} setContent={setContent} />
       {emulateMobile && 
         <Rnd>
