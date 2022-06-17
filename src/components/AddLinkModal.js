@@ -34,7 +34,8 @@ export const AddLinkModal = ({ appendTarget, setAppendTarget }) => {
   const pasteHtmlAtCaret = () => {
     appendTarget.extractContents();
     let span = document.createElement('span')
-    span.style.fontWeight = "bold"
+    span.style.fontWeight = "normal"
+    span.style.color = "#1cbf73"
     let a = document.createElement('a');
     let linkText = document.createTextNode(link?.text);
     a.appendChild(linkText);

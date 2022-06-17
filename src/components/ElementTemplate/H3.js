@@ -11,7 +11,7 @@ export const Heading3 = ({ data, mode }) => {
       display="flex"
       alignItems="center"
       justifyContent="flex-start"
-      px={(mode === "edit") ? 5 : 3}
+      px={{base: "5vw", md: "1.875vw"}}
     >
       <Box 
         flex="1"

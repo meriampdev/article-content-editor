@@ -11,7 +11,6 @@ export const RenderContent = ({ index, contents, setContent, contentData, tool_i
   const [collapse, setCollapse] = useState(false)
   const Component = ELEMENT_TEMPLATE[tool_id]
   const ElementTool = ELEMENT_TOOL[tool_id]
-
   return (
     <Box my={2}>
       <Box 

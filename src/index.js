@@ -5,6 +5,7 @@ import './index.css';
 import './tooltip.css';
 import App from './App';
 import { Preview } from "components/Preview"
+import { MobileView } from "./MobileView"
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
@@ -13,6 +14,7 @@ import {
 } from "react-router-dom";
 import { ChakraProvider } from '@chakra-ui/react'
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
+import { EditorProvider } from "context/editor"
 
 export const apolloClient = new ApolloClient({
   cache: new InMemoryCache(),
@@ -24,12 +26,15 @@ root.render(
   <React.StrictMode>
     <ChakraProvider>
       <ApolloProvider client={apolloClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<App />} />
-            <Route path="preview/:topicId" element={<Preview />} />
-          </Routes>
-        </BrowserRouter>
+        <EditorProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<App />} />
+              <Route path="/mobile" element={<MobileView />} />
+              <Route path="preview/:topicId" element={<Preview />} />
+            </Routes>
+          </BrowserRouter>
+        </EditorProvider>
       </ApolloProvider>
     </ChakraProvider>
   </React.StrictMode>
